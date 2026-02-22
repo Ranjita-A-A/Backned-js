@@ -147,8 +147,8 @@ const loginUser = asyncHandler( async (req,res) =>{
 
 const logOutUser = asyncHandler(async(req, res)=>{
     await User.findByIdAndUpdate(req.user._id,{
-        $set:{
-            refreshToken: undefined
+        $unset:{
+            refreshToken: 1
         }
     },
     {
@@ -216,8 +216,12 @@ const refreshAccessToken = asyncHandler(async(req, res) => {
 const changeCurrentPassword = asyncHandler(async(req,res) => {
     const {oldPassword, newPassword, confPassword} = req.body
 
-    if(newPassword !== confPassword){
-        new ApiError(401,"new Password doesn't match confirm Password")
+    if(oldPassword === newPassword){
+        throw new ApiError(401, "new password can't be same as old password")
+    }
+
+    if(newPassword != confPassword){
+        throw new ApiError(401,"new Password doesn't match confirm Password")
     }
 
     const user = await User.findById(req.user?._id)
@@ -249,7 +253,7 @@ const updateAccountDetails = asyncHandler(async(req, res) =>{
     const {fullName, email} = req.body
 
     if(!fullName || !email){
-        throw new ApiError(401, "Fullname and email both required")
+        throw new ApiError(401, "Either you are missing fullname or password OR either of the information is wrong")
     }
 
     const user = await User.findByIdAndUpdate(
@@ -263,7 +267,7 @@ const updateAccountDetails = asyncHandler(async(req, res) =>{
         {new: true}
     ).select("-password")
 
-    return req
+    return res
     .status(200)
     .json(new ApiResponse( 200, user, "User details updated successfully") )
 })
