@@ -13,7 +13,6 @@ import {
     updateUserCoverImage } from "../controllers/user.controller.js";
 import {upload} from "../middlewares/multer.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { uploadOnCloudinary } from "../utils/cloudinary_fileUpload.js";
 
 const router = Router()
 
