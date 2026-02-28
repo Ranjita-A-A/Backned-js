@@ -1,5 +1,4 @@
 import { Router } from "express";
-import router from "./user.route";
 import { 
     getAllVideos,
     publishVideo,
@@ -19,6 +18,7 @@ router
 .route("/video-publish")
 .get(getAllVideos)
 .post(
+    verifyJWT,
     upload.fields([
         {
             name: "videoFile",
@@ -32,11 +32,11 @@ router
     publishVideo
 )
 
-router.route("get-video/:videoId").get(getVideoById)
-router.route("update-video/:videoId").patch(verifyJWT, updateVideo)
-router.route("update-thumbnail/:videoId").patch(verifyJWT, upload.single("thumbnail", updateThumbnail))
-router.route("update-views/:videoId").patch(verifyJWT, updateVideoViews)
-router.route("delete-video/:videoId").delete(verifyJWT, deleteVideo)
-router.route("toggle/publish/:videoId").patch(verifyJWT, togglePublishStatus)
+router.route("/get-video/:videoId").get(getVideoById)
+router.route("/update-video/:videoId").patch(verifyJWT, updateVideo)
+router.route("/update-thumbnail/:videoId").patch(verifyJWT, upload.single("thumbnail") , updateThumbnail)
+router.route("/update-views/:videoId").patch(verifyJWT, updateVideoViews)
+router.route("/delete-video/:videoId").delete(verifyJWT, deleteVideo)
+router.route("/toggle/publish/:videoId").patch(verifyJWT, togglePublishStatus)
 
 export default router

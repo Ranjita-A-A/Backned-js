@@ -16,7 +16,7 @@ const uploadOnCloudinary = async function(localFilePath) {
         // Upload the file to cloudinary
         const uploadResult = await cloud.uploader.upload(localFilePath,{
             resource_type: "auto",
-            transformation: [{width: 300, height:100, crop: "fill"}]
+            transformation: [{width: 500, height:500, crop: "fill"}]
         })
         console.log("Clodinary response :")
         console.log(uploadResult);
@@ -34,7 +34,7 @@ const deleteFromCloudinary = async function (localFilePath) {
     try {
        if(!localFilePath) return null
        
-       cloud.uploader.destroy(localFilePath.public_id, {invalidate: true})
+       cloud.uploader.destroy(localFilePath.url, {invalidate: true})
 
     } catch (error) {
         throw new Error("Something went wrong while deleting video file from cloudinary")

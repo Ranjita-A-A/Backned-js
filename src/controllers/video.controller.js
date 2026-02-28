@@ -127,7 +127,7 @@ const getVideoById = asyncHandler(async(req, res) => {
 
 const updateVideo = asyncHandler(async (req, res) => {
     const videoId = req.params.videoId
-    const {title, description} = req.body
+    const {title, description} = req.body || ""
 
     if(!title && !description){
         throw new ApiError(400 , "Atleast one field is required")
@@ -214,7 +214,9 @@ const updateVideoViews = asyncHandler(async(req, res) => {
 
     return res
     .status(200)
-    .json(200, video.views, "Views updated successfully")
+    .json(
+        new ApiResponse(200, video.views, "Views updated successfully")
+    )
 })
 
 const deleteVideo = asyncHandler( async (req, res) => {
